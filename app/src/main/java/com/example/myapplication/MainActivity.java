@@ -11,49 +11,54 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 
+
+import android.os.Bundle;
+import android.widget.LinearLayout;
+
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
-    private GridLayout grid;
-    private Button[][] buttons = new Button[5][14];
+    private DrawingView drawingView;
+    private Button clearButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        grid = findViewById(R.id.grid);
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 14; j++) {
-                buttons[i][j] = new Button(this);
-                GridLayout.LayoutParams params = new GridLayout.LayoutParams();
-                params.columnSpec = GridLayout.spec(i);
-                params.rowSpec = GridLayout.spec(j);
-                params.setGravity(Gravity.FILL);
-                buttons[i][j].setLayoutParams(params);
-                buttons[i][j].setBackgroundColor(Color.WHITE);
-                int finalI = i;
-                int finalJ = j;
-                buttons[i][j].setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        onButtonClicked(finalI, finalJ);
-                    }
-                });
-                grid.addView(buttons[i][j]);
+        // Create the DrawingView
+        drawingView = new DrawingView(this);
+
+        // Create the clear button
+        clearButton = new Button(this);
+        clearButton.setText("Clear");
+
+        // Set an OnClickListener on the button to clear the grid when it's clicked
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawingView.clearGrid();
             }
-        }
-    }
+        });
 
-    private void onButtonClicked(int i, int j) {
-        Button button = buttons[i][j];
-        ColorDrawable buttonColor = (ColorDrawable) button.getBackground();
+        // Create a vertical LinearLayout and add the clearButton and drawingView to it
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(clearButton);
+        layout.addView(drawingView);
 
-        if (buttonColor.getColor() == Color.WHITE) {
-            button.setBackgroundColor(Color.BLACK);
-        } else {
-            button.setBackgroundColor(Color.WHITE);
-        }
+        // Set the LinearLayout as the content view of the activity
+        setContentView(layout);
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
