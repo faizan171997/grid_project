@@ -32,10 +32,12 @@ public class DrawingView extends View {
 
     @Override
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
-        cellWidth = w / (float) NUM_COLUMNS;
-        cellHeight = h / (float) NUM_ROWS;
-        Log.d("cellWidht", String.valueOf(cellWidth));
-        Log.d("cellHeight", String.valueOf(cellHeight));
+        // Determine the smaller dimension
+        int minDimension = Math.min(w, h);
+
+        // Set both the cellWidth and cellHeight to the smaller dimension divided by the number of cells
+        cellWidth = cellHeight = minDimension / (float) NUM_COLUMNS;
+
         for (int i = 0; i < NUM_COLUMNS; i++) {
             for (int j = 0; j < NUM_ROWS; j++) {
                 cells[i][j] = new Rect(
@@ -47,6 +49,7 @@ public class DrawingView extends View {
             }
         }
     }
+
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -64,11 +67,18 @@ public class DrawingView extends View {
         if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE) {
             int column = (int) (event.getX() / cellWidth);
             int row = (int) (event.getY() / cellHeight);
+
+            // Add bounds checking
+            if (column >= NUM_COLUMNS || row >= NUM_ROWS) {
+                return true;
+            }
+
             cellChecked[column][row] = true;
             invalidate();
         }
         return true;
     }
+
 
 
     public void clearGrid() {
