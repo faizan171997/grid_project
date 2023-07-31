@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,8 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class DrawingView extends View {
-    private static final int NUM_COLUMNS = 5;
-    private static final int NUM_ROWS = 14;
+    private static final int NUM_COLUMNS = 32;
+    private static final int NUM_ROWS = 32;
 
     private Rect[][] cells;
     private boolean[][] cellChecked;
@@ -33,6 +34,8 @@ public class DrawingView extends View {
     protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         cellWidth = w / (float) NUM_COLUMNS;
         cellHeight = h / (float) NUM_ROWS;
+        Log.d("cellWidht", String.valueOf(cellWidth));
+        Log.d("cellHeight", String.valueOf(cellHeight));
         for (int i = 0; i < NUM_COLUMNS; i++) {
             for (int j = 0; j < NUM_ROWS; j++) {
                 cells[i][j] = new Rect(
@@ -98,7 +101,7 @@ public class DrawingView extends View {
             @Override
             public void run() {
                 try {
-                    URL url = new URL("http://10.0.0.47:5233/post");
+                    URL url = new URL("http://10.0.0.27:3001/post");
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.setRequestMethod("POST");
                     conn.setDoOutput(true);
